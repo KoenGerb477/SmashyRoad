@@ -63,7 +63,7 @@ namespace SmashyRoad
             gameStarted = false;
 
             //make player
-            player = new Car(this.Width / 2 + 100, this.Height / 2 + 100, (float)(Math.PI / 4), "player", null);
+            player = new Car(this.Width / 2, this.Height / 2 + 50, (float)(Math.PI / 4), "player", null);
             
 
             //make 3x3 chunk grid with player in the middle
@@ -181,11 +181,11 @@ namespace SmashyRoad
             //player dies so end game and record score
             if (playerDead)
             {
-                playerScore = Convert.ToInt32(scoreTimer.ElapsedMilliseconds / 100);
-
                 gameTimer.Stop();
                 policeTimer.Stop();
                 scoreTimer.Stop();
+
+                playerScore = Convert.ToInt32(scoreTimer.ElapsedMilliseconds / 100);
 
                 //check for a highscore
                 //ez mode
