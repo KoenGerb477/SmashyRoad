@@ -17,11 +17,13 @@ namespace SmashyRoad
             InitializeComponent();
         }
 
+        //go back to game
         private void backButton_Click(object sender, EventArgs e)
         {
             Form1.ChangeScreen(this, new GameScreen());
         }
 
+        //select colour and go back to game
         private void car1_Click(object sender, EventArgs e)
         {
             Form1.carSelected = "car1";

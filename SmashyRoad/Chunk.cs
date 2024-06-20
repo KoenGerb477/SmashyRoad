@@ -10,10 +10,13 @@ namespace SmashyRoad
 {
     internal class Chunk
     {
+
         public int size;
         public float x;
         public float y;
+
         public SolidBrush brush;
+
         public PointF[] points = new PointF[4];
         public PointF[] roadPoints = new PointF[12];
 
@@ -24,11 +27,13 @@ namespace SmashyRoad
             y = _y;
             brush = _brush;
 
+            //make chunks four corners
             points[0] = new PointF(x, y);
             points[1] = new PointF(x + size / 2, y - size / 2);
             points[2] = new PointF(x + size, y);
             points[3] = new PointF(x + size / 2, y + size / 2);
 
+            //make the 12 points of the road
             roadPoints[0] = new PointF(x + size * 3/ 16, y + size * 3/16);
             roadPoints[1] = new PointF(x + size * 6/16, y);
             roadPoints[2] = new PointF(x + size * 3/16, y - size * 3/16);
@@ -43,26 +48,32 @@ namespace SmashyRoad
             roadPoints[11] = new PointF(x + size * 5 / 16, y + size * 5 / 16);
         }
 
+
         public void Move(float angle, int speed)
         {
+            //calculate x and y components based on the angle and speed
             float xSpeed = (float)(speed * Math.Cos(angle));
             float ySpeed = (float)(speed * Math.Sin(angle));
 
+            //move chunk points
             for (int i = 0; i < points.Length; i++)
             {
                 points[i].Y += ySpeed;
                 points[i].X -= xSpeed;
             }
 
+            //move road points
             for (int i = 0; i < roadPoints.Length; i++)
             {
                 roadPoints[i].Y += ySpeed;
                 roadPoints[i].X -= xSpeed;
             }
 
+            //update x value
             x  = points[0].X; y = points[0].Y;
         }
 
+        //method to check what chunk the player is on
         public bool IsPointInPolygon(PointF[] polygon, PointF point)
         {
             int polygonLength = polygon.Length, i = 0;

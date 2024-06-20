@@ -21,7 +21,7 @@ namespace SmashyRoad
         _3DPoint[] shapePoints = new _3DPoint[8];
         public PointF[] drawPoints = new PointF[8];
         public float direction;
-        public int speed = +14;
+        public int speed = 14;
         public int maxSpeed = 15;
         string type;
 
@@ -33,9 +33,6 @@ namespace SmashyRoad
 
         int lightFlashingCounter = 0;
 
-        //remove later
-        public float crossProduct;
-
         public Car(int x, int y, float direction, string type, Car player)
         {
             this.size = 100;
@@ -44,12 +41,14 @@ namespace SmashyRoad
             this.direction = direction;
             this.type = type;
 
+            //police colors
             if (type == "police")
             {
                 brush1 = new SolidBrush(Color.Red);
                 brush2 = new SolidBrush(Color.Blue);
                 brush3 = new SolidBrush(Color.Black);
             }
+            //player and car colors
             else if (type == "player")
             {
                 if (Form1.carSelected == "car1")
@@ -96,6 +95,7 @@ namespace SmashyRoad
 
         void MakeListOfPoints()
         {
+            //make usable direction for 3D environment
             float _3D_Direction = direction - (float)Math.PI / 4;
 
             if (_3D_Direction < 0)
@@ -103,6 +103,7 @@ namespace SmashyRoad
                 _3D_Direction += (float)Math.PI * 2;
             }
 
+            //make the points in 3D space
             shapePoints[0] = new _3DPoint(0, 0, 0);
             shapePoints[1] = new _3DPoint(0, 0, size / 2);
             shapePoints[2] = new _3DPoint(size / 2 * (float)Math.Sin(-_3D_Direction), size / 2 * (float)Math.Cos(-_3D_Direction), size / 2);
@@ -116,6 +117,7 @@ namespace SmashyRoad
 
         void InterpretPoints()
         {
+            //convert 3D points into 2D points to draw on screen
             for (int i = 0; i < shapePoints.Length; i++)
             {
                 drawPoints[i] = new PointF((float)(x + shapePoints[i].x * Math.PI / 4 - shapePoints[i].y * Math.PI / 4), (float)(y - shapePoints[i].x * Math.PI / 4 - shapePoints[i].y * Math.PI / 4 - shapePoints[i].z));
@@ -127,6 +129,7 @@ namespace SmashyRoad
             MakeListOfPoints();
             InterpretPoints();
 
+            //make direction in range from 0 - 2Pi
             if (direction > Math.PI * 2)
             {
                 direction -= (float)Math.PI * 2;
@@ -139,6 +142,7 @@ namespace SmashyRoad
             PointF[] smallSide = new PointF[4];
             PointF[] bigSide = new PointF[4];
 
+            //decide what sides are in front to draw
             //far side and right side
             if (direction > Math.PI * 3 / 2 && direction < Math.PI * 2)
             {
@@ -192,6 +196,7 @@ namespace SmashyRoad
                 bigSide[3] = drawPoints[4];
             }
 
+            //give police flashing effect
             if (type == "police" && lightFlashingCounter % 10 == 0)
             {
                 SolidBrush tempBrush = brush1;
@@ -204,8 +209,10 @@ namespace SmashyRoad
                 lightFlashingCounter++;
             }
 
+            //top side never changes
             PointF[] top = { drawPoints[1], drawPoints[2], drawPoints[6], drawPoints[5] };
 
+            //draw car
             e.Graphics.FillPolygon(brush1, smallSide);
             e.Graphics.FillPolygon(brush2, bigSide);
             e.Graphics.FillPolygon(brush3, top);
@@ -215,12 +222,17 @@ namespace SmashyRoad
         {
             float xSpeed = 0, ySpeed = 0;
 
+            //if living move if dead don't
             if (living)
             {
+                //vector of police direction and vector of police to player direction
                 Vector toPlayer = new Vector(player.x - x, player.y - y);
                 Vector police = new Vector((float)(-speed * Math.Cos(direction)), (float)(speed * Math.Sin(direction)));
-                crossProduct = police.CrossProduct(toPlayer, police);
 
+                //do the cross product of vector
+                float crossProduct = police.CrossProduct(toPlayer, police);
+
+                //decide what direction to turn
                 if (crossProduct < -500)
                 {
                     direction -= 0.1f;
@@ -230,19 +242,24 @@ namespace SmashyRoad
                     direction += 0.1f;
                 }
 
+                //add driving speed to x and y components
                 xSpeed = (float)(this.speed * Math.Cos(direction));
                 ySpeed = (float)(this.speed * Math.Sin(direction));
             }
 
+            //movement of the world around the player
             xSpeed += (float)(player.speed * Math.Cos(player.direction));
             ySpeed += (float)(player.speed * Math.Sin(player.direction));
 
+            //move player
             y += Convert.ToInt32(ySpeed);
             x -= Convert.ToInt32(xSpeed);
         }
 
         public bool CheckCollision(Car player)
         {
+            //// CODE TO CHECK IF CARS COLLIDE
+            ///
             List<PointF> playerVertices = new List<PointF>
             {
                 new PointF(player.drawPoints[0].X, player.drawPoints[0].Y),
@@ -277,6 +294,7 @@ namespace SmashyRoad
 
         public void Collide()
         {
+            //player dies
             brush1.Color = Color.Black;
             brush2.Color = Color.Black;
             brush3.Color = Color.Black;
@@ -290,7 +308,7 @@ namespace SmashyRoad
         }
     }
 
-    #region polygon
+    #region polygon class
     public class Polygon
     {
         public List<PointF> Vertices { get; set; }

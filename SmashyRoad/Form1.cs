@@ -14,21 +14,29 @@ namespace SmashyRoad
 {
     public partial class Form1 : Form
     {
+        //screen dimensions
         public static int height;
         public static int width;
+
+        //default difficulty easy
         public static int spawnSpeed = 5000;
+
+        //default car
         public static string carSelected = "car1";
 
+        //high scores for each difficulty
         public static List<int> eHighScores = new List<int>();
         public static List<int> mHighScores = new List<int>();
         public static List<int> hHighScores = new List<int>();
 
+        //background music
         public static System.Windows.Media.MediaPlayer backSound = new System.Windows.Media.MediaPlayer();
 
         public Form1()
         {
             InitializeComponent();
 
+            //background music
             backSound.Open(new Uri(Application.StartupPath + "\\Resources\\Ragtime Piano _ SCOTT JOPLIN . The Entertainer (1902).wav"));
             backSound.MediaEnded += new EventHandler(backSoundEnded);
             backSound.Play();
@@ -42,12 +50,14 @@ namespace SmashyRoad
             ChangeScreen(this, new GameScreen());
         }
 
+        //event method for repeating background music
         private void backSoundEnded(object sender, EventArgs e)
         {
             backSound.Stop();
             backSound.Play();
         }
 
+        //put scores in list from xml
         public void LoadScores()
         {
             XmlReader reader = XmlReader.Create("HighScores.xml");
@@ -57,8 +67,6 @@ namespace SmashyRoad
             {
                 if (reader.NodeType == XmlNodeType.Text)
                 {
-                    //reader.ReadToFollowing("Score");
-
                     int score = Convert.ToInt32(reader.ReadString());
 
                     if(counter <= 3)
@@ -81,6 +89,7 @@ namespace SmashyRoad
             reader.Close();
         }
 
+        //save high scores to xml
         public static void SaveScores()
         {
             XmlWriter writer = XmlWriter.Create("HighScores.xml", null);

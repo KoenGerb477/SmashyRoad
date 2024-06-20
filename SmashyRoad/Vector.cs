@@ -32,6 +32,7 @@ namespace SmashyRoad
             return new Vector(x * scalar, y * scalar);
         }
 
+        //cross product returning x val of cross
         public float CrossProduct(Vector v, Vector w)
         {
             float zVal = v.x * w.y - v.y * w.x;
@@ -39,12 +40,14 @@ namespace SmashyRoad
             return zVal;
         }
 
+        //get mag of vector
         public float GetMagnitude(Vector v)
         {
             float magnitude = (float)(Math.Sqrt(Math.Pow(v.x, 2) + Math.Pow(v.y, 2)));
             return magnitude;
         }
 
+        //get dot product
         public float DotProduct(Vector v, Vector b)
         {
             float dotProduct = v.x * b.x + v.y * b.y;

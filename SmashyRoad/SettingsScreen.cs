@@ -17,11 +17,13 @@ namespace SmashyRoad
             InitializeComponent();
         }
 
+        //go back to game
         private void backButton_Click_1(object sender, EventArgs e)
         {
             Form1.ChangeScreen(this, new GameScreen());
         }
 
+        //select difficulty and go back to gameS
         private void mediumButton_Click(object sender, EventArgs e)
         {
             Form1.spawnSpeed = 2000;

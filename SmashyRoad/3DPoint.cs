@@ -20,6 +20,7 @@ namespace SmashyRoad
             z = _z;
         }
 
+        //rotate point around pivot point
         public void RotatePoint(double radians, PointF pivot)
         {
             var cosTheta = Math.Cos(radians);
